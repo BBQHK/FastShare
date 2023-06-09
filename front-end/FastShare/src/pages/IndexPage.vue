@@ -60,7 +60,7 @@
 }
 
 .main {
-  background-color: rgb(102, 20, 255);
+  background-color: rgb(91, 39, 187);
 }
 </style>
 
