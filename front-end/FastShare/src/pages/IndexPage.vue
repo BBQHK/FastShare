@@ -9,7 +9,7 @@
               <template v-if="receive_code_show">
                 <q-card-section class="text-black">
                   <div class="row">
-                    <q-btn flat round dense icon="arrow_back" @click="receive_code_show = false" />
+                    <q-btn flat round dense icon="arrow_back" @click="CancelUpload" />
                     <div class="text-h6 text-weight-bolder">Waiting...</div>
                     <div>Enter the 6-digit key on the receiving device</div>
                     <div>Expires in <span style="color: red;">{{ expire_time }}</span></div>
@@ -114,6 +114,18 @@ const ReceiveCodeInput = ref('');
 const receive_code_show = ref(false);
 const receive_code = ref('000000');
 const expire_time = ref('00:00');
+let interval;
+
+const CancelUpload = () => {
+  receive_code_show.value = false;
+  clearInterval(interval);
+  Notify.create({
+    icon: 'cancel',
+    message: 'Upload canceled!',
+    color: 'negative',
+    position: 'top'
+  });
+}
 
 const handleUpload = () => {
   receive_code_show.value = true;
@@ -124,7 +136,7 @@ const handleUpload = () => {
   expire_time.value = '10:00';
 
   // expire time countdown
-  const interval = setInterval(() => {
+  interval = setInterval(() => {
     const time = expire_time.value.split(':');
     let minutes = parseInt(time[0]);
     let seconds = parseInt(time[1]);
