@@ -40,7 +40,7 @@
             </q-card>
           </div>
           <div class=".col">
-            <div style="margin-top: 50px; margin-left: 50px;">
+            <div style="margin-top: 70px; margin-left: 50px;">
               <q-img style="width: 500px;" src="..\assets\logo.png" />
               <div class="text-h5" style="margin-left: 40px;">
                 Share and download files easily with FastShare, your go-to file sharing platform.
