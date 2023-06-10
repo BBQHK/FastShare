@@ -111,7 +111,7 @@ import { Notify } from 'quasar';
 
 const model = ref(null);
 const ReceiveCodeInput = ref('');
-const receive_code_show = ref(true);
+const receive_code_show = ref(false);
 const receive_code = ref('226688');
 const expire_time = ref('10:00');
 
