@@ -11,9 +11,3 @@
         </q-toolbar>
     </q-footer>
 </template>
-
-<script>
-export default {
-  name: 'MainFooter'
-}
-</script>

@@ -11,17 +11,8 @@
   </q-layout>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
+<script setup>
 import MainHeader from 'components/MainHeader.vue'
 import MainFooter from 'components/MainFooter.vue'
 
-export default defineComponent({
-  name: 'MainLayout',
-
-  components: {
-    MainHeader,
-    MainFooter
-  },
-})
 </script>

@@ -39,7 +39,7 @@
               </q-card-actions>
             </q-card>
           </div>
-          <div class=".col">
+          <div class="col">
             <div style="margin-top: 70px; margin-left: 50px;">
               <q-img style="width: 500px;" src="..\assets\logo.png" />
               <div class="text-h5" style="margin-left: 40px;">

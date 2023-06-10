@@ -38,9 +38,12 @@
     </q-drawer>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
+
+const leftDrawerOpen = ref(false);
+const app_version = 'v1.0.0';
 
 const linksList = [
   {
@@ -87,23 +90,10 @@ const linksList = [
   }
 ]
 
-export default {
-    name: 'MainHeader',
-    components: {
-        EssentialLink
-    },
-    setup () {
-        const leftDrawerOpen = ref(false);
-        const app_version = 'v1.0.0';
+const essentialLinks = linksList;
 
-        return {
-            essentialLinks: linksList,
-            leftDrawerOpen,
-            app_version,
-            toggleLeftDrawer () {
-                leftDrawerOpen.value = !leftDrawerOpen.value
-            }
-        }
-    }
+function toggleLeftDrawer () {
+  leftDrawerOpen.value = !leftDrawerOpen.value
 }
+
 </script>
