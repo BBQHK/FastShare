@@ -42,10 +42,27 @@
       <router-view />
     </q-page-container>
 
-    <q-footer elevated>
+    <q-footer elevated style="height: 50px; color:#000000; background-color: #ffffff;">
         <q-toolbar style="color:#000000; background-color: #ffffff;">
-          <q-toolbar-title>Share any file to anyone.</q-toolbar-title>
+          <q-toolbar-title>Share any file with anyone. ❤️</q-toolbar-title>
+        
+          <div class="copyright">
+            <span class="text-weight-bold">
+              © FastShare, Inc.
+            </span>
+          </div>
+
         </q-toolbar>
+        <!-- <div class="copyright">
+          <span class="text-weight-bold">
+            © FastShare, Inc.
+          </span>
+        </div>
+        <div>
+          <span class="text-weight-bold">
+            Made with ❤️ by <a href="www.test.com">Team 1</a>
+          </span>
+        </div> -->
     </q-footer>
     
   </q-layout>
