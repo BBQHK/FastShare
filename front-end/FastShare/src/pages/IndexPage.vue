@@ -39,7 +39,7 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                  <q-btn flat @click="receive_code_show=true">Upload</q-btn>
+                  <q-btn flat @click="handleUpload">Upload</q-btn>
                 </q-card-actions>
               </template>
             </q-card>
@@ -112,8 +112,46 @@ import { Notify } from 'quasar';
 const model = ref(null);
 const ReceiveCodeInput = ref('');
 const receive_code_show = ref(false);
-const receive_code = ref('226688');
-const expire_time = ref('10:00');
+const receive_code = ref('000000');
+const expire_time = ref('00:00');
+
+const handleUpload = () => {
+  receive_code_show.value = true;
+  // random 6-digit code
+  receive_code.value = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+
+  // set expire time
+  expire_time.value = '10:00';
+
+  // expire time countdown
+  const interval = setInterval(() => {
+    const time = expire_time.value.split(':');
+    let minutes = parseInt(time[0]);
+    let seconds = parseInt(time[1]);
+
+    if (seconds === 0) {
+      if (minutes === 0) {
+        clearInterval(interval);
+        receive_code_show.value = false;
+        Notify.create({
+          icon: 'cancel',
+          message: 'Receive code expired!',
+          color: 'negative',
+          position: 'top'
+        });
+
+        return;
+      }
+      minutes--;
+      seconds = 59;
+    } else {
+      seconds--;
+    }
+
+    expire_time.value = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }, 1000);
+
+}
 
 const copyCode = () => {
   navigator.clipboard.writeText(receive_code.value);
