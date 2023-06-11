@@ -29,7 +29,7 @@
                 </q-card-section>
 
                 <q-card-section>
-                  <q-file color="pink-13" filled v-model="model" label="Drop or select files here" multiple>
+                  <q-file color="deep-orange-6" filled v-model="model" label="Drop or select files here" multiple>
                     <template v-if="model" v-slot:append>
                       <q-icon name="cancel" @click.stop.prevent="model = null" class="cursor-pointer"></q-icon>
                     </template>
@@ -49,7 +49,7 @@
                 <div class="text-h6 text-weight-bolder">Receive</div>
               </q-card-section>
               <q-card-section>
-                <q-input color="pink-13" filled v-model="ReceiveCodeInput" label="Enter code here" />
+                <q-input color="deep-orange-6" filled v-model="ReceiveCodeInput" label="Enter code here" />
               </q-card-section>
               <q-separator />
 
