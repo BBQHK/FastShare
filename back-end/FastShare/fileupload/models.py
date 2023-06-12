@@ -5,7 +5,7 @@ class File(models.Model):
     file = models.FileField(upload_to='uploads/')
     filetype = models.CharField(default=None, max_length=255)
     filesize = models.IntegerField(default=None)
-    receiveCode = models.CharField(null=True, max_length=255)
+    receiveCode = models.CharField(null=True, max_length=6)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

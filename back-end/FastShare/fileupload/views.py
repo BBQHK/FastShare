@@ -11,7 +11,7 @@ class FileListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = FileSerializer
 
 def generate_receiveCode():
-    return random.randint(100000, 999999)
+    return random.randint(000000, 999999)
 
 @api_view(['POST'])
 def upload_file(request):
@@ -19,8 +19,13 @@ def upload_file(request):
     name = file.name
     filetype = file.name.split('.')[-1]
     filesize = file.size
-    receiveCode = generate_receiveCode()
-    file_obj = File.objects.create(name=name, file=file, filetype=filetype, filesize=filesize, receiveCode=receiveCode)
+    receive_Code = generate_receiveCode()
+
+    # check if receiveCode is unique
+    while File.objects.filter(receiveCode=receive_Code).exists():
+        receive_Code = generate_receiveCode()
+
+    file_obj = File.objects.create(name=name, file=file, filetype=filetype, filesize=filesize, receiveCode=receive_Code)
     return Response({'message': 'File uploaded successfully', 'id': file_obj.id, 'receiveCode': file_obj.receiveCode}, status=201)
 
 @api_view(['GET'])
