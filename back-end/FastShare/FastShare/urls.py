@@ -20,7 +20,7 @@ from django.contrib import admin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/files/', upload_file, name='file-upload'),
+    path('api/files/upload/', upload_file, name='file-upload'),
     # path('api/files/<int:file_id>/download/', download_file, name='file-download'),
     path('api/files/<int:receive_Code>/download/', download_file, name='file-download'),
 ]
