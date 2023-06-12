@@ -11,16 +11,21 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Set the MEDIA_URL and MEDIA_ROOT for file uploads
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-&gn#2a*^u#&#)@*=!38$cr+i1z=qbe1x2dqaey7c&_5()y4u3%"
+SECRET_KEY = "django-insecure-mgp_@l1i4ys1c*8bv074yhb*r934tw0o=iu08a57z-u57waj0l"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "fileupload",
 ]
 
 MIDDLEWARE = [
