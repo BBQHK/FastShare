@@ -11,7 +11,12 @@ class FileListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = FileSerializer
 
 def generate_receiveCode():
-    return random.randint(000000, 999999)
+    code = random.randint(0, 999999)
+    # pad with 0s to make 6 digits
+    while len(str(code)) < 6:
+        code = int(str(code) + '0')
+
+    return code
 
 @api_view(['POST'])
 def upload_file(request):
