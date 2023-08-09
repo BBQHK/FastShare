@@ -40,5 +40,6 @@ def download_file(request, receive_Code):
     with open(file_path, 'rb') as f:
         response = HttpResponse(f, content_type='application/octet-stream')
         response['Content-Disposition'] = f'attachment; filename="{file.name}"'
+        response['Access-Control-Expose-Headers'] = 'Content-Disposition'
         return response
     return Response({'message': 'File not found'}, status=404)

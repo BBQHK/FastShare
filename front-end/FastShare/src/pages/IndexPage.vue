@@ -10,7 +10,7 @@
                 <q-card-section class="text-black">
                   <div class="row">
                     <q-btn flat round dense icon="arrow_back" @click="CancelUpload" />
-                    <div class="text-h6 text-weight-bolder">Waiting...</div>
+                    <div class="text-h6 text-weight-bolder">Receive Code</div>
                     <div>Enter the 6-digit key on the receiving device</div>
                     <div>Expires in <span style="color: red;">{{ expire_time }}</span></div>
                   </div>
@@ -54,7 +54,7 @@
               <q-separator />
 
               <q-card-actions align="right">
-                <q-btn flat>Downlaod</q-btn>
+                <q-btn flat @click="handleDownload">Downlaod</q-btn>
               </q-card-actions>
             </q-card>
           </div>
@@ -108,6 +108,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Notify } from 'quasar';
+import { api } from 'boot/axios';
 
 const model = ref(null);
 const ReceiveCodeInput = ref('');
@@ -164,6 +165,41 @@ const handleUpload = () => {
   }, 1000);
 
 }
+
+const handleDownload = () => {
+  api({
+    url: `/api/files/${ReceiveCodeInput.value}/download`,
+    method: 'get',
+    responseType: 'blob', // Specify the response type as 'blob' to handle binary data
+  }).then(response => {
+    const contentDispositionHeader = response.headers['content-disposition'];
+    const fileNameMatch = contentDispositionHeader.match(/filename="(.+)"/);
+    if (fileNameMatch && fileNameMatch[1]) {
+      const fileName = fileNameMatch[1];
+
+      // Create a temporary anchor element for downloading the file
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(response.data);
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      Notify.create({
+        icon: 'cloud_download',
+        message: 'File downloaded!',
+        color: 'green-5',
+        position: 'top'
+      });
+    } else {
+      // Handle the case where the file name is not provided in the response
+      console.error('File name not found in the response');
+    }
+  }).catch(error => {
+    // Handle any error that occurred during the API request
+    console.error('Error downloading the file:', error);
+  });
+};
 
 const copyCode = () => {
   navigator.clipboard.writeText(receive_code.value);
