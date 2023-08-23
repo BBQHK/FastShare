@@ -29,9 +29,9 @@
                 </q-card-section>
 
                 <q-card-section>
-                  <q-file color="deep-orange-6" filled v-model="model" label="Drop or select files here" multiple>
-                    <template v-if="model" v-slot:append>
-                      <q-icon name="cancel" @click.stop.prevent="model = null" class="cursor-pointer"></q-icon>
+                  <q-file color="deep-orange-6" filled v-model="file_model" label="Drop or select files here" multiple>
+                    <template v-if="file_model" v-slot:append>
+                      <q-icon name="cancel" @click.stop.prevent="file_model = null" class="cursor-pointer"></q-icon>
                     </template>
                   </q-file>
                 </q-card-section>
@@ -54,7 +54,7 @@
               <q-separator />
 
               <q-card-actions align="right">
-                <q-btn flat @click="handleDownload">Downlaod</q-btn>
+                <q-btn flat @click="handleDownload(); ReceiveCodeInput = '';">Downlaod</q-btn>
               </q-card-actions>
             </q-card>
           </div>
@@ -110,7 +110,7 @@ import { ref } from 'vue'
 import { Notify } from 'quasar';
 import { api } from 'boot/axios';
 
-const model = ref(null);
+const file_model = ref(null);
 const ReceiveCodeInput = ref('');
 const receive_code_show = ref(false);
 const receive_code = ref('000000');
@@ -129,9 +129,32 @@ const CancelUpload = () => {
 }
 
 const handleUpload = () => {
-  receive_code_show.value = true;
-  // random 6-digit code
-  receive_code.value = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+  // get file from file_model
+  const files = file_model.value;
+  // console.log(files);
+  api({
+    url: `/api/files/upload/`,
+    method: 'post',
+    data: {
+      file: files[0],
+    },
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }).then(response => {
+    console.log(response.data.receiveCode);
+    Notify.create({
+      icon: 'cloud_upload',
+      message: 'File uploaded!',
+      color: 'green-5',
+      position: 'top'
+    });
+    receive_code_show.value = true;
+    receive_code.value = response.data.receiveCode.toString();
+  }).catch(error => {
+    // Handle any error that occurred during the API request
+    console.error('Error uploading the file:', error);
+  });
 
   // set expire time
   expire_time.value = '10:00';

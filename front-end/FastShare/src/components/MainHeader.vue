@@ -42,8 +42,11 @@
 import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 
+// get version from package.json
+import { version } from '../../package.json'
+
 const leftDrawerOpen = ref(false);
-const app_version = 'v1.0.0';
+const app_version = 'v'+version;
 
 const linksList = [
   {
