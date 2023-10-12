@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from .models import File
 from .serializers import FileSerializer
 from django.http import HttpResponse
+import datetime
 
 class FileListCreateAPIView(generics.ListCreateAPIView):
     queryset = File.objects.all()
@@ -53,5 +54,13 @@ def download_file(request, receive_Code):
         response = HttpResponse(f, content_type='application/octet-stream')
         response['Content-Disposition'] = f'attachment; filename="{file.name}"'
         response['Access-Control-Expose-Headers'] = 'Content-Disposition'
+
+        # check if upload time is less than 10 minutes ago
+        upload_time = file.uploaded_at
+        current_time = datetime.datetime.now(upload_time.tzinfo)
+        time_diff = current_time - upload_time
+        if time_diff.total_seconds() > 600:
+            return Response({'message': 'Your receive code expired!'}, status=410)
+
         return response
     return Response({'message': 'File not found'}, status=404)

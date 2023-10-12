@@ -239,6 +239,15 @@ const handleDownload = () => {
   }).catch(error => {
     // Handle any error that occurred during the API request
     console.error('Error downloading the file:', error);
+    // if the status is 404, notify the user that the file was not found
+    if (error.response && error.response.status === 410) {
+      Notify.create({
+        icon: 'cancel',
+        message: 'Your receive code expired!',
+        color: 'negative',
+        position: 'top'
+      });
+    }
   });
 };
 
