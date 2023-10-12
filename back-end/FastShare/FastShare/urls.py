@@ -15,12 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from fileupload.views import upload_file, download_file
+from fileupload.views import upload_file, download_file, cancel_upload
 from django.contrib import admin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/files/upload/', upload_file, name='file-upload'),
+    path('api/files/cancel-upload/', cancel_upload, name='cancel-upload'),
     # path('api/files/<int:file_id>/download/', download_file, name='file-download'),
     path('api/files/<int:receive_Code>/download/', download_file, name='file-download'),
 ]

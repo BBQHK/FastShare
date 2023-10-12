@@ -114,17 +114,34 @@ const file_model = ref(null);
 const ReceiveCodeInput = ref('');
 const receive_code_show = ref(false);
 const receive_code = ref('000000');
+const file_id = ref('');
 const expire_time = ref('00:00');
 let interval;
 
 const CancelUpload = () => {
-  receive_code_show.value = false;
-  clearInterval(interval);
-  Notify.create({
-    icon: 'cancel',
-    message: 'Upload canceled!',
-    color: 'negative',
-    position: 'top'
+  api({
+    url: `/api/files/cancel-upload/`,
+    method: 'post',
+    data: {
+      file_id: file_id.value,
+      receive_Code: receive_code.value,
+    },
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }).then(response => {
+    console.log(response.data);
+    receive_code_show.value = false;
+    clearInterval(interval);
+    Notify.create({
+      icon: 'cancel',
+      message: 'Upload canceled!',
+      color: 'negative',
+      position: 'top'
+    });
+  }).catch(error => {
+    // Handle any error that occurred during the API request
+    console.error('Error canceling the upload:', error);
   });
 }
 
@@ -151,6 +168,7 @@ const handleUpload = () => {
     });
     receive_code_show.value = true;
     receive_code.value = response.data.receiveCode.toString();
+    file_id.value = response.data.id.toString();
   }).catch(error => {
     // Handle any error that occurred during the API request
     console.error('Error uploading the file:', error);

@@ -33,6 +33,18 @@ def upload_file(request):
     file_obj = File.objects.create(name=name, file=file, filetype=filetype, filesize=filesize, receiveCode=receive_Code)
     return Response({'message': 'File uploaded successfully', 'id': file_obj.id, 'receiveCode': file_obj.receiveCode}, status=201)
 
+@api_view(['POST'])
+def cancel_upload(request):
+    file_id = request.data['file_id']
+    receive_Code = request.data['receive_Code']
+    try:
+        file = File.objects.get(id=file_id, receiveCode=receive_Code)
+    except File.DoesNotExist:
+        return Response({'message': 'File not found'}, status=404)
+    
+    file.delete()
+    return Response({'message': 'Cancel successfully, the file has delected.'}, status=200)
+
 @api_view(['GET'])
 def download_file(request, receive_Code):
     file = File.objects.get(receiveCode=receive_Code)
