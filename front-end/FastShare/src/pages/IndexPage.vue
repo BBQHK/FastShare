@@ -109,6 +109,7 @@
 import { ref } from 'vue'
 import { Notify } from 'quasar';
 import { api } from 'boot/axios';
+import * as JSZip from 'jszip';
 
 const file_model = ref(null);
 const ReceiveCodeInput = ref('');
@@ -145,10 +146,25 @@ const CancelUpload = () => {
   });
 }
 
-const handleUpload = () => {
-  // get file from file_model
-  const files = file_model.value;
+const handleUpload = async () => {
+// get file from file_model
+let files = file_model.value;
+// console.log(files.length);
+
+// if files item more than 1, zip them together and put the zip file into files
+if (files.length > 1) {
+  const zip = new JSZip();
+  files.forEach(file => {
+    zip.file(file.name, file);
+  });
+
+  // Use async/await to wait for zip generation to complete
+  const content = await zip.generateAsync({ type: 'blob' });
+  files = [new File([content], 'files.zip')];
   // console.log(files);
+}
+
+// console.log(files);
   api({
     url: `/api/files/upload/`,
     method: 'post',

@@ -3,8 +3,9 @@ FastShare is a file-sharing application that allows you to quickly and securely 
 
 ## TODO
 1. Cancel upload function (Done)
-2. Multi files upload
+2. Multi files upload (Done)
 3. Expire time (Done)
 
 ## Bug to be fix
 1. Download fails when the file name contains Chinese (fixed)
+2. Expire timer speed bug
