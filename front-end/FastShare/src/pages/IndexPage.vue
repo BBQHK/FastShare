@@ -214,7 +214,19 @@ const handleDownload = () => {
     responseType: 'blob', // Specify the response type as 'blob' to handle binary data
   }).then(response => {
     const contentDispositionHeader = response.headers['content-disposition'];
-    const fileNameMatch = contentDispositionHeader.match(/filename="(.+)"/);
+    let fileNameMatch = "";
+    // if contentDispositionHeader is starting with string "=?utf-8?b?" print the string between "=?utf-8?b?" and "?="
+    if (contentDispositionHeader.startsWith('=?utf-8?b?')) {
+      const fileName = contentDispositionHeader.match(/utf-8\?b\?(.+)\?=/)[1];
+      // decode the base64 encoded file name
+      const decodedFileName = atob(fileName);
+      // decode the utf-8 encoded file name
+      const utf8FileName = decodeURIComponent(escape(decodedFileName));
+      fileNameMatch = utf8FileName.match(/filename="(.+)"/);
+    }else{
+      fileNameMatch = contentDispositionHeader.match(/filename="(.+)"/);
+    }
+
     if (fileNameMatch && fileNameMatch[1]) {
       const fileName = fileNameMatch[1];
 

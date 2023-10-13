@@ -7,4 +7,4 @@ FastShare is a file-sharing application that allows you to quickly and securely 
 3. Expire time (Done)
 
 ## Bug to be fix
-1. Download fails when the file name contains Chinese
+1. Download fails when the file name contains Chinese (fixed)
