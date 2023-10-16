@@ -5,6 +5,8 @@ from rest_framework.decorators import api_view
 from .models import File
 from .serializers import FileSerializer
 from django.http import HttpResponse
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 import datetime
 
 class FileListCreateAPIView(generics.ListCreateAPIView):
@@ -48,6 +50,7 @@ def cancel_upload(request):
 
 @api_view(['GET'])
 def download_file(request, receive_Code):
+    channel_layer = get_channel_layer()
     file = File.objects.get(receiveCode=receive_Code)
     file_path = file.file.path
     with open(file_path, 'rb') as f:
@@ -55,12 +58,27 @@ def download_file(request, receive_Code):
         response['Content-Disposition'] = f'attachment; filename="{file.name}"'
         response['Access-Control-Expose-Headers'] = 'Content-Disposition'
 
+        async_to_sync(channel_layer.group_send)(
+        'file_download_'+str(receive_Code),
+            {
+                'type': 'send_message',
+                'message': 'file_downloading'
+            }
+        )
+
         # check if upload time is less than 10 minutes ago
         upload_time = file.uploaded_at
         current_time = datetime.datetime.now(upload_time.tzinfo)
         time_diff = current_time - upload_time
         if time_diff.total_seconds() > 600:
             return Response({'message': 'Your receive code expired!'}, status=410)
-
+        
+        async_to_sync(channel_layer.group_send)(
+            'file_download_'+str(receive_Code),
+            {
+                'type': 'send_message',
+                'message': 'file_downloaded'
+            }
+        )
         return response
     return Response({'message': 'File not found'}, status=404)
