@@ -23,6 +23,21 @@
                 </q-card-section>
 
               </template>
+              <template v-else-if="transfer_successful">
+                <q-card-section class="text-black">
+                  <div class="text-h6 text-weight-bolder">Share</div>
+                </q-card-section>
+
+                <q-card-section>
+                  <div class="text-h6 text-weight-bolder"><q-icon name="check_circle" size="100px" color="green-5" />Transfer Successful!</div>
+                </q-card-section>
+
+                <q-separator />
+
+                <q-card-actions align="right">
+                  <q-btn flat @click="transfer_successful = false">Share Again</q-btn>
+                </q-card-actions>
+              </template>
               <template v-else>
                 <q-card-section class="text-black">
                   <div class="text-h6 text-weight-bolder">Share</div>
@@ -114,6 +129,7 @@ import * as JSZip from 'jszip';
 const file_model = ref(null);
 const ReceiveCodeInput = ref('');
 const receive_code_show = ref(false);
+const transfer_successful = ref(false);
 const receive_code = ref('000000');
 const file_id = ref('');
 const expire_time = ref('00:00');
