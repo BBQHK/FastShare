@@ -134,6 +134,7 @@ const receive_code = ref('000000');
 const file_id = ref('');
 const expire_time = ref('00:00');
 let interval;
+let socket;
 
 const CancelUpload = () => {
   api({
@@ -201,6 +202,31 @@ if (files.length > 1) {
     receive_code_show.value = true;
     receive_code.value = response.data.receiveCode.toString();
     file_id.value = response.data.id.toString();
+
+    // Connect to the WebSocket server
+    socket = new WebSocket('ws://localhost:8000/ws/download_status/'+receive_code.value+'/');
+
+    // Handle the WebSocket connection events
+    socket.addEventListener('open', (event) => {
+      console.log('WebSocket connection opened');
+    });
+
+    socket.addEventListener('message', (event) => {
+      console.log('WebSocket message received:', event.data);
+      const data = JSON.parse(event.data);
+      if (data.message === 'file_downloaded') {
+        transfer_successful.value = true;
+        receive_code_show.value = false;
+        clearInterval(interval);
+
+        // close the WebSocket connection
+        socket.close();
+      }
+    });
+
+    socket.addEventListener('close', (event) => {
+      console.log('WebSocket connection closed');
+    });
   }).catch(error => {
     // Handle any error that occurred during the API request
     console.error('Error uploading the file:', error);
