@@ -137,7 +137,6 @@ const receive_code = ref('000000');
 const file_id = ref('');
 const expire_time = ref('00:00');
 let interval;
-let socket;
 
 const handleCancelUpload = () => {
   cancelUpload(file_id.value, receive_code.value).then(response => {
@@ -227,7 +226,7 @@ if (files.length > 1) {
     }).catch(error => {
       console.error('Error handling WebSocket events:', error);
     });
-    
+
   }).catch(error => {
     // Handle any error that occurred during the API request
     console.error('Error uploading the file:', error);
