@@ -51,7 +51,10 @@ def cancel_upload(request):
 @api_view(['GET'])
 def download_file(request, receive_Code):
     channel_layer = get_channel_layer()
-    file = File.objects.get(receiveCode=receive_Code)
+    try:
+        file = File.objects.get(receiveCode=receive_Code)
+    except File.DoesNotExist:
+        return Response({'message': 'File not found or sharing has been canceled by sender.'}, status=404)
     file_path = file.file.path
     with open(file_path, 'rb') as f:
         response = HttpResponse(f, content_type='application/octet-stream')

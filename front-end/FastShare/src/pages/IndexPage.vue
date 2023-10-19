@@ -35,7 +35,7 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                  <q-btn flat @click="transfer_successful = false">Share Again</q-btn>
+                  <q-btn flat @click="transfer_successful = false; file_model = null;">Share Again</q-btn>
                 </q-card-actions>
               </template>
               <template v-else>
@@ -305,11 +305,20 @@ const handleDownload = () => {
   }).catch(error => {
     // Handle any error that occurred during the API request
     console.error('Error downloading the file:', error);
-    // if the status is 404, notify the user that the file was not found
+    // if the status is 410, notify the user that the receive code expired
     if (error.response && error.response.status === 410) {
       Notify.create({
         icon: 'cancel',
         message: 'Your receive code expired!',
+        color: 'negative',
+        position: 'top'
+      });
+    }
+    // if the status is 404, notify the user that the receive code is invalid
+    else if (error.response && error.response.status === 404) {
+      Notify.create({
+        icon: 'cancel',
+        message: 'File sharing has been canceled by sender!',
         color: 'negative',
         position: 'top'
       });
