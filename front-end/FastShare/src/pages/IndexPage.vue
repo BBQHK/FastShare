@@ -126,6 +126,9 @@ import { Notify } from 'quasar';
 import { api } from 'boot/axios';
 import * as JSZip from 'jszip';
 
+const API_URL = process.env.API_URL;
+const API_PORT = process.env.API_PORT;
+
 const file_model = ref(null);
 const ReceiveCodeInput = ref('');
 const receive_code_show = ref(false);
@@ -204,7 +207,7 @@ if (files.length > 1) {
     file_id.value = response.data.id.toString();
 
     // Connect to the WebSocket server
-    socket = new WebSocket('ws://localhost:8000/ws/download_status/'+receive_code.value+'/');
+    socket = new WebSocket(`ws://${API_URL}:${API_PORT}/ws/download_status/${receive_code.value}/`);
 
     // Handle the WebSocket connection events
     socket.addEventListener('open', (event) => {
@@ -267,7 +270,7 @@ if (files.length > 1) {
 
 const handleDownload = () => {
   api({
-    url: `/api/files/${ReceiveCodeInput.value}/download`,
+    url: `/api/files/${ReceiveCodeInput.value}/download/`,
     method: 'get',
     responseType: 'blob', // Specify the response type as 'blob' to handle binary data
   }).then(response => {
