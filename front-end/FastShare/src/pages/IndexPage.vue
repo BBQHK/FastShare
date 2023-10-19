@@ -156,13 +156,7 @@ const handleCancelUpload = () => {
   });
 }
 
-const handleUpload = async () => {
-// get file from file_model
-let files = file_model.value;
-// console.log(files.length);
-
-// if files item more than 1, zip them together and put the zip file into files
-if (files.length > 1) {
+const generateZipFile = async (files) => {
   const zip = new JSZip();
   files.forEach(file => {
     zip.file(file.name, file);
@@ -170,8 +164,17 @@ if (files.length > 1) {
 
   // Use async/await to wait for zip generation to complete
   const content = await zip.generateAsync({ type: 'blob' });
-  files = [new File([content], 'files.zip')];
-  // console.log(files);
+  return new File([content], 'files.zip');
+};
+
+const handleUpload = async () => {
+// get file from file_model
+let files = file_model.value;
+// console.log(files.length);
+
+// if files item more than 1, zip them together and put the zip file into files
+if (files.length > 1) {
+  files = [await generateZipFile(files)];
 }
 
 // console.log(files);
