@@ -9,7 +9,7 @@
               <template v-if="receive_code_show">
                 <q-card-section class="text-black">
                   <div class="row">
-                    <q-btn flat round dense icon="arrow_back" @click="CancelUpload" />
+                    <q-btn flat round dense icon="arrow_back" @click="handleCancelUpload" />
                     <div class="text-h6 text-weight-bolder">Receive Code</div>
                     <div>Enter the 6-digit key on the receiving device</div>
                     <div>Expires in <span style="color: red;">{{ expire_time }}</span></div>
@@ -123,8 +123,8 @@
 <script setup>
 import { ref } from 'vue'
 import { Notify } from 'quasar';
-import { api } from 'boot/axios';
 import * as JSZip from 'jszip';
+import { uploadFile, cancelUpload, downloadFileByReceiveCode } from '../services/fileTransferService'
 
 const API_URL = process.env.API_URL;
 const API_PORT = process.env.API_PORT;
@@ -139,18 +139,8 @@ const expire_time = ref('00:00');
 let interval;
 let socket;
 
-const CancelUpload = () => {
-  api({
-    url: `/api/files/cancel-upload/`,
-    method: 'post',
-    data: {
-      file_id: file_id.value,
-      receive_Code: receive_code.value,
-    },
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  }).then(response => {
+const handleCancelUpload = () => {
+  cancelUpload(file_id.value, receive_code.value).then(response => {
     console.log(response.data);
     receive_code_show.value = false;
     clearInterval(interval);
@@ -185,16 +175,7 @@ if (files.length > 1) {
 }
 
 // console.log(files);
-  api({
-    url: `/api/files/upload/`,
-    method: 'post',
-    data: {
-      file: files[0],
-    },
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  }).then(response => {
+  uploadFile(files[0]).then(response => {
     console.log(response.data.receiveCode);
     Notify.create({
       icon: 'cloud_upload',
@@ -269,11 +250,7 @@ if (files.length > 1) {
 }
 
 const handleDownload = () => {
-  api({
-    url: `/api/files/${ReceiveCodeInput.value}/download/`,
-    method: 'get',
-    responseType: 'blob', // Specify the response type as 'blob' to handle binary data
-  }).then(response => {
+  downloadFileByReceiveCode(ReceiveCodeInput.value).then(response => {
     const contentDispositionHeader = response.headers['content-disposition'];
     let fileNameMatch = "";
     // if contentDispositionHeader is starting with string "=?utf-8?b?" print the string between "=?utf-8?b?" and "?="
