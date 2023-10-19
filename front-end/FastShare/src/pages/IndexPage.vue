@@ -167,6 +167,36 @@ const generateZipFile = async (files) => {
   return new File([content], 'files.zip');
 };
 
+const handleWebSocketEvents = (receiveCode) => {
+  return new Promise((resolve, reject) => {
+    // Connect to the WebSocket server
+    const socket = new WebSocket(`ws://${API_URL}:${API_PORT}/ws/download_status/${receiveCode}/`);
+
+    // Handle the WebSocket connection events
+    socket.addEventListener('open', (event) => {
+      console.log('WebSocket connection opened');
+    });
+
+    socket.addEventListener('message', (event) => {
+      console.log('WebSocket message received:', event.data);
+      const data = JSON.parse(event.data);
+      if (data.message === 'file_downloaded') {
+        clearInterval(interval);
+
+        // close the WebSocket connection
+        socket.close();
+
+        resolve();
+      }
+    });
+
+    socket.addEventListener('close', (event) => {
+      console.log('WebSocket connection closed');
+      reject(new Error('WebSocket connection closed'));
+    });
+  });
+};
+
 const handleUpload = async () => {
 // get file from file_model
 let files = file_model.value;
@@ -190,30 +220,14 @@ if (files.length > 1) {
     receive_code.value = response.data.receiveCode.toString();
     file_id.value = response.data.id.toString();
 
-    // Connect to the WebSocket server
-    socket = new WebSocket(`ws://${API_URL}:${API_PORT}/ws/download_status/${receive_code.value}/`);
-
     // Handle the WebSocket connection events
-    socket.addEventListener('open', (event) => {
-      console.log('WebSocket connection opened');
+    handleWebSocketEvents(receive_code.value).then(() => {
+      transfer_successful.value = true;
+      receive_code_show.value = false;
+    }).catch(error => {
+      console.error('Error handling WebSocket events:', error);
     });
-
-    socket.addEventListener('message', (event) => {
-      console.log('WebSocket message received:', event.data);
-      const data = JSON.parse(event.data);
-      if (data.message === 'file_downloaded') {
-        transfer_successful.value = true;
-        receive_code_show.value = false;
-        clearInterval(interval);
-
-        // close the WebSocket connection
-        socket.close();
-      }
-    });
-
-    socket.addEventListener('close', (event) => {
-      console.log('WebSocket connection closed');
-    });
+    
   }).catch(error => {
     // Handle any error that occurred during the API request
     console.error('Error uploading the file:', error);
