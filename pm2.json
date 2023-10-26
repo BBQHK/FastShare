@@ -1,0 +1,16 @@
+{
+    "apps": [
+      {
+        "name": "quasar",
+        "script": "path of the npm",
+        "args": "run dev",
+        "cwd": "front-end/FastShare"
+      },
+      {
+        "name": "django",
+        "script": "python",
+        "args": "manage.py runserver 0.0.0.0:5001",
+        "cwd": "back-end/FastShare"
+      }
+    ]
+}
