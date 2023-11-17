@@ -5,118 +5,126 @@
 
         <div class="row">
           <div class=".col">
-            <q-card class="share-card">
-              <template v-if="receive_code_show">
-                <q-card-section class="text-black">
-                  <div class="row">
-                    <q-btn flat round dense icon="arrow_back" @click="handleCancelUpload" />
-                    <div class="text-h6 text-weight-bolder">Receive Code</div>
-                    <div>Enter the 6-digit key on the receiving device</div>
-                    <div>Expires in <span style="color: red;">{{ expire_time }}</span></div>
-                  </div>
-                </q-card-section>
+            <q-intersection
+              transition="scale"
+            >
+              <q-card class="share-card">
+                <template v-if="receive_code_show">
+                  <q-card-section class="text-black">
+                    <div class="row">
+                      <q-btn flat round dense icon="arrow_back" @click="handleCancelUpload" />
+                      <div class="text-h6 text-weight-bolder">Receive Code</div>
+                      <div>Enter the 6-digit key on the receiving device</div>
+                      <div>Expires in <span style="color: red;">{{ expire_time }}</span></div>
+                    </div>
+                  </q-card-section>
 
-                <q-card-section>
-                  <div class="key-box text-center" @click="copyCode">
-                    <span v-for = "(digit, index) in receive_code" :key="index">{{ digit }}</span>
-                  </div>
-                </q-card-section>
+                  <q-card-section>
+                    <div class="key-box text-center" @click="copyCode">
+                      <span v-for = "(digit, index) in receive_code" :key="index">{{ digit }}</span>
+                    </div>
+                  </q-card-section>
 
-              </template>
-              <template v-else-if="upload_transfering">
-                <q-card-section class="text-black">
-                  <div class="text-h6 text-weight-bolder">Transfering...</div>
-                </q-card-section>
+                </template>
+                <template v-else-if="upload_transfering">
+                  <q-card-section class="text-black">
+                    <div class="text-h6 text-weight-bolder">Transfering...</div>
+                  </q-card-section>
 
-                <q-card-section>
-                  <q-linear-progress size="15px" color="red-5" :value="0.2"></q-linear-progress>
-                </q-card-section>
+                  <q-card-section>
+                    <q-linear-progress size="15px" color="red-5" :value="0.2"></q-linear-progress>
+                  </q-card-section>
 
-                <q-separator />
+                  <q-separator />
 
-                <q-card-actions align="right">
-                  <q-btn flat @click="upload_transfering = false;">Cancel</q-btn>
-                </q-card-actions>
-              </template>
-              <template v-else-if="upload_transfer_successful">
-                <q-card-section class="text-black">
-                  <div class="text-h6 text-weight-bolder">Share</div>
-                </q-card-section>
+                  <q-card-actions align="right">
+                    <q-btn flat @click="upload_transfering = false;">Cancel</q-btn>
+                  </q-card-actions>
+                </template>
+                <template v-else-if="upload_transfer_successful">
+                  <q-card-section class="text-black">
+                    <div class="text-h6 text-weight-bolder">Share</div>
+                  </q-card-section>
 
-                <q-card-section>
-                  <div class="text-h6 text-weight-bolder"><q-icon name="check_circle" size="100px" color="green-5" />Transfer Successful!</div>
-                </q-card-section>
+                  <q-card-section>
+                    <div class="text-h6 text-weight-bolder"><q-icon name="check_circle" size="100px" color="green-5" />Transfer Successful!</div>
+                  </q-card-section>
 
-                <q-separator />
+                  <q-separator />
 
-                <q-card-actions align="right">
-                  <q-btn flat @click="upload_transfer_successful = false; file_model = null;">Share Again</q-btn>
-                </q-card-actions>
-              </template>
-              <template v-else>
-                <q-card-section class="text-black">
-                  <div class="text-h6 text-weight-bolder">Share</div>
-                </q-card-section>
+                  <q-card-actions align="right">
+                    <q-btn flat @click="upload_transfer_successful = false; file_model = null;">Share Again</q-btn>
+                  </q-card-actions>
+                </template>
+                <template v-else>
+                  <q-card-section class="text-black">
+                    <div class="text-h6 text-weight-bolder">Share</div>
+                  </q-card-section>
 
-                <q-card-section>
-                  <q-file color="deep-orange-6" filled v-model="file_model" label="Drop or select files here" multiple>
-                    <template v-if="file_model" v-slot:append>
-                      <q-icon name="cancel" @click.stop.prevent="file_model = null" class="cursor-pointer"></q-icon>
-                    </template>
-                  </q-file>
-                </q-card-section>
+                  <q-card-section>
+                    <q-file color="deep-orange-6" filled v-model="file_model" label="Drop or select files here" multiple>
+                      <template v-if="file_model" v-slot:append>
+                        <q-icon name="cancel" @click.stop.prevent="file_model = null" class="cursor-pointer"></q-icon>
+                      </template>
+                    </q-file>
+                  </q-card-section>
 
-                <q-separator />
+                  <q-separator />
 
-                <q-card-actions align="right">
-                  <q-btn flat @click="handleUpload">Upload</q-btn>
-                </q-card-actions>
-              </template>
-            </q-card>
+                  <q-card-actions align="right">
+                    <q-btn flat @click="handleUpload">Upload</q-btn>
+                  </q-card-actions>
+                </template>
+              </q-card>
+            </q-intersection>
 
-            <q-card class="receive-card">
-              <template v-if="download_transfering">
-                <q-card-section class="text-black">
-                  <div class="text-h6 text-weight-bolder">Downloading...</div>
-                </q-card-section>
-                <q-card-section>
-                  <q-linear-progress size="15px" color="red-5" :value="0.1"></q-linear-progress>
-                </q-card-section>
-                <q-separator />
+            <q-intersection
+              transition="scale"
+            >
+              <q-card class="receive-card">
+                <template v-if="download_transfering">
+                  <q-card-section class="text-black">
+                    <div class="text-h6 text-weight-bolder">Downloading...</div>
+                  </q-card-section>
+                  <q-card-section>
+                    <q-linear-progress size="15px" color="red-5" :value="0.1"></q-linear-progress>
+                  </q-card-section>
+                  <q-separator />
 
-                <q-card-actions align="right">
-                  <q-btn flat @click="download_transfering = false;">Cancel</q-btn>
-                </q-card-actions>
-              </template>
-              <template v-else-if="download_transfer_successful">
-                <q-card-section class="text-black">
-                  <div class="text-h6 text-weight-bolder">Share</div>
-                </q-card-section>
+                  <q-card-actions align="right">
+                    <q-btn flat @click="download_transfering = false;">Cancel</q-btn>
+                  </q-card-actions>
+                </template>
+                <template v-else-if="download_transfer_successful">
+                  <q-card-section class="text-black">
+                    <div class="text-h6 text-weight-bolder">Share</div>
+                  </q-card-section>
 
-                <q-card-section>
-                  <div class="text-h6 text-weight-bolder"><q-icon name="check_circle" size="100px" color="green-5" />Download Successful!</div>
-                </q-card-section>
+                  <q-card-section>
+                    <div class="text-h6 text-weight-bolder"><q-icon name="check_circle" size="100px" color="green-5" />Download Successful!</div>
+                  </q-card-section>
 
-                <q-separator />
+                  <q-separator />
 
-                <q-card-actions align="right">
-                  <q-btn flat @click="download_transfer_successful = false;">BACK</q-btn>
-                </q-card-actions>
-              </template>
-              <template v-else>
-                <q-card-section class="text-black">
-                  <div class="text-h6 text-weight-bolder">Receive</div>
-                </q-card-section>
-                <q-card-section>
-                  <q-input color="deep-orange-6" filled v-model="ReceiveCodeInput" label="Enter code here" />
-                </q-card-section>
-                <q-separator />
+                  <q-card-actions align="right">
+                    <q-btn flat @click="download_transfer_successful = false;">BACK</q-btn>
+                  </q-card-actions>
+                </template>
+                <template v-else>
+                  <q-card-section class="text-black">
+                    <div class="text-h6 text-weight-bolder">Receive</div>
+                  </q-card-section>
+                  <q-card-section>
+                    <q-input color="deep-orange-6" filled v-model="ReceiveCodeInput" label="Enter code here" />
+                  </q-card-section>
+                  <q-separator />
 
-                <q-card-actions align="right">
-                  <q-btn flat @click="handleDownload(); ReceiveCodeInput = '';">Downlaod</q-btn>
-                </q-card-actions>
-              </template>
-            </q-card>
+                  <q-card-actions align="right">
+                    <q-btn flat @click="handleDownload(); ReceiveCodeInput = '';">Downlaod</q-btn>
+                  </q-card-actions>
+                </template>
+              </q-card>
+            </q-intersection>
           </div>
           <div class="col">
             <div style="margin-top: 70px; margin-left: 50px;">
