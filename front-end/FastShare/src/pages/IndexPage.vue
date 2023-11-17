@@ -26,6 +26,15 @@
                   </q-card-section>
 
                 </template>
+                <template v-else-if="zip_files">
+                  <q-card-section class="text-black">
+                    <div class="text-h6 text-weight-bolder">Zipping files together...</div>
+                  </q-card-section>
+
+                  <q-card-section>
+                    <q-linear-progress size="15px" color="red-5" :value="zip_progress"></q-linear-progress>
+                  </q-card-section>
+                </template>
                 <template v-else-if="upload_transfering">
                   <q-card-section class="text-black">
                     <div class="text-h6 text-weight-bolder">Transfering...</div>
@@ -185,6 +194,8 @@ const API_PORT = process.env.API_PORT;
 const file_model = ref(null);
 const ReceiveCodeInput = ref('');
 const receive_code_show = ref(false);
+const zip_files = ref(false);
+const zip_progress = ref(0);
 const upload_transfering = ref(false);
 const download_transfering = ref(false);
 const upload_transfer_successful = ref(false);
@@ -212,13 +223,20 @@ const handleCancelUpload = () => {
 }
 
 const generateZipFile = async (files) => {
+  zip_files.value = true;
+  zip_progress.value = 0;
   const zip = new JSZip();
   files.forEach(file => {
     zip.file(file.name, file);
   });
 
   // Use async/await to wait for zip generation to complete
-  const content = await zip.generateAsync({ type: 'blob' });
+  const content = await zip.generateAsync({ type: 'blob' }, function(update) {
+    // console.log(`Progress: ${update.percent / 100}`);
+    zip_progress.value = (update.percent / 100).toFixed(2);
+  });
+  zip_files.value = false;
+
   return new File([content], 'files.zip');
 };
 
