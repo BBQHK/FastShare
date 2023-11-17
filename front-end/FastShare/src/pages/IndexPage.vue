@@ -23,6 +23,21 @@
                 </q-card-section>
 
               </template>
+              <template v-else-if="upload_transfering">
+                <q-card-section class="text-black">
+                  <div class="text-h6 text-weight-bolder">Transfering...</div>
+                </q-card-section>
+
+                <q-card-section>
+                  <q-linear-progress size="15px" color="red-5" :value="0.2"></q-linear-progress>
+                </q-card-section>
+
+                <q-separator />
+
+                <q-card-actions align="right">
+                  <q-btn flat @click="upload_transfering = false;">Cancel</q-btn>
+                </q-card-actions>
+              </template>
               <template v-else-if="transfer_successful">
                 <q-card-section class="text-black">
                   <div class="text-h6 text-weight-bolder">Share</div>
@@ -60,17 +75,32 @@
             </q-card>
 
             <q-card class="receive-card">
-              <q-card-section class="text-black">
-                <div class="text-h6 text-weight-bolder">Receive</div>
-              </q-card-section>
-              <q-card-section>
-                <q-input color="deep-orange-6" filled v-model="ReceiveCodeInput" label="Enter code here" />
-              </q-card-section>
-              <q-separator />
+              <template v-if="download_transfering">
+                <q-card-section class="text-black">
+                  <div class="text-h6 text-weight-bolder">Downloading...</div>
+                </q-card-section>
+                <q-card-section>
+                  <q-linear-progress size="15px" color="red-5" :value="0.1"></q-linear-progress>
+                </q-card-section>
+                <q-separator />
 
-              <q-card-actions align="right">
-                <q-btn flat @click="handleDownload(); ReceiveCodeInput = '';">Downlaod</q-btn>
-              </q-card-actions>
+                <q-card-actions align="right">
+                  <q-btn flat @click="download_transfering = false;">Cancel</q-btn>
+                </q-card-actions>
+              </template>
+              <template v-else>
+                <q-card-section class="text-black">
+                  <div class="text-h6 text-weight-bolder">Receive</div>
+                </q-card-section>
+                <q-card-section>
+                  <q-input color="deep-orange-6" filled v-model="ReceiveCodeInput" label="Enter code here" />
+                </q-card-section>
+                <q-separator />
+
+                <q-card-actions align="right">
+                  <q-btn flat @click="handleDownload(); ReceiveCodeInput = '';">Downlaod</q-btn>
+                </q-card-actions>
+              </template>
             </q-card>
           </div>
           <div class="col">
@@ -132,6 +162,8 @@ const API_PORT = process.env.API_PORT;
 const file_model = ref(null);
 const ReceiveCodeInput = ref('');
 const receive_code_show = ref(false);
+const upload_transfering = ref(false);
+const download_transfering = ref(false);
 const transfer_successful = ref(false);
 const receive_code = ref('000000');
 const file_id = ref('');
