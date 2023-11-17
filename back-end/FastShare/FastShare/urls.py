@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.urls import path
 from fileupload.views import upload_file, download_file, cancel_upload
+from webrtc.views import webrtc_connection
 from django.contrib import admin
 
 urlpatterns = [
@@ -24,4 +25,5 @@ urlpatterns = [
     path('api/files/cancel-upload/', cancel_upload, name='cancel-upload'),
     # path('api/files/<int:file_id>/download/', download_file, name='file-download'),
     path('api/files/<int:receive_Code>/download/', download_file, name='file-download'),
+    path('api/webrtc-connection/', webrtc_connection, name='webrtc-connection'), # get the receive code for create the websocket connection
 ]

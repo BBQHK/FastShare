@@ -30,7 +30,7 @@ SECRET_KEY = "django-insecure-mgp_@l1i4ys1c*8bv074yhb*r934tw0o=iu08a57z-u57waj0l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.109.9.212']
 
 
 # Application definition
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "fileupload",
+    "webrtc",
 ]
 
 ASGI_APPLICATION = 'FastShare.asgi.application'
