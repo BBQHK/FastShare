@@ -38,7 +38,7 @@
                   <q-btn flat @click="upload_transfering = false;">Cancel</q-btn>
                 </q-card-actions>
               </template>
-              <template v-else-if="transfer_successful">
+              <template v-else-if="upload_transfer_successful">
                 <q-card-section class="text-black">
                   <div class="text-h6 text-weight-bolder">Share</div>
                 </q-card-section>
@@ -50,7 +50,7 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                  <q-btn flat @click="transfer_successful = false; file_model = null;">Share Again</q-btn>
+                  <q-btn flat @click="upload_transfer_successful = false; file_model = null;">Share Again</q-btn>
                 </q-card-actions>
               </template>
               <template v-else>
@@ -86,6 +86,21 @@
 
                 <q-card-actions align="right">
                   <q-btn flat @click="download_transfering = false;">Cancel</q-btn>
+                </q-card-actions>
+              </template>
+              <template v-else-if="download_transfer_successful">
+                <q-card-section class="text-black">
+                  <div class="text-h6 text-weight-bolder">Share</div>
+                </q-card-section>
+
+                <q-card-section>
+                  <div class="text-h6 text-weight-bolder"><q-icon name="check_circle" size="100px" color="green-5" />Download Successful!</div>
+                </q-card-section>
+
+                <q-separator />
+
+                <q-card-actions align="right">
+                  <q-btn flat @click="download_transfer_successful = false;">BACK</q-btn>
                 </q-card-actions>
               </template>
               <template v-else>
@@ -164,7 +179,8 @@ const ReceiveCodeInput = ref('');
 const receive_code_show = ref(false);
 const upload_transfering = ref(false);
 const download_transfering = ref(false);
-const transfer_successful = ref(false);
+const upload_transfer_successful = ref(false);
+const download_transfer_successful = ref(false);
 const receive_code = ref('000000');
 const file_id = ref('');
 const expire_time = ref('00:00');
@@ -253,7 +269,7 @@ if (files.length > 1) {
 
     // Handle the WebSocket connection events
     handleWebSocketEvents(receive_code.value).then(() => {
-      transfer_successful.value = true;
+      upload_transfer_successful.value = true;
       receive_code_show.value = false;
     }).catch(error => {
       console.error('Error handling WebSocket events:', error);
