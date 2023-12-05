@@ -1,4 +1,6 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
+from .models import ReceiveCodeRecord
+from asgiref.sync import sync_to_async
 
 # create a consumer to handle and exchange the offer and answer of WebRTC
 
@@ -6,6 +8,13 @@ class SignallingConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.receive_Code = self.scope['url_route']['kwargs']['receive_Code']
         self.group_name = 'p2p_signal_%s' % self.receive_Code
+
+        # Check if the receive_Code exists in the database
+        exists = await sync_to_async(ReceiveCodeRecord.objects.filter(receiveCode=self.receive_Code).exists)()
+        if not exists:
+            # Close the connection
+            await self.close()
+            return
 
         # Join the group
         await self.channel_layer.group_add(
