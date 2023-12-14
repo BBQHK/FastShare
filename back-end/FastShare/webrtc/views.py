@@ -1,3 +1,4 @@
+import datetime
 import random
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -15,6 +16,10 @@ def generate_receiveCode():
 def webrtc_connection(request): # return the receive code for user create the websocket connection
     receive_Code = generate_receiveCode()
     while ReceiveCodeRecord.objects.filter(receiveCode=receive_Code).exists():
-        receive_Code = generate_receiveCode()
+        # check the created_at of the receive code, if it is > 10 min, delete it
+        receiveCodeRecord = ReceiveCodeRecord.objects.get(receiveCode=receive_Code)
+        if receiveCodeRecord.created_at < datetime.timezone.now() - datetime.timedelta(minutes=10):
+            receiveCodeRecord.delete()
+            break
     ReceiveCodeRecord.objects.create(receiveCode=receive_Code)
     return Response({'receive_Code': receive_Code}, status=200)
