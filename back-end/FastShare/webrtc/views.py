@@ -22,5 +22,7 @@ def webrtc_connection(request): # return the receive code for user create the we
         if receiveCodeRecord.created_at < timezone.now() - datetime.timedelta(minutes=10):
             receiveCodeRecord.delete()
             break
+        else:
+            receive_Code = generate_receiveCode()
     ReceiveCodeRecord.objects.create(receiveCode=receive_Code)
     return Response({'receive_Code': receive_Code}, status=200)

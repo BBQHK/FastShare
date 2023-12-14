@@ -1,4 +1,5 @@
 back-end/FastShare/db.sqlite3
-back-end/FastShare/FastShare/__pycache__/settings.cpython-38.pyc
-back-end/FastShare/fileupload/__pycache__/views.cpython-38.pyc
+back-end/FastShare/FastShare/__pycache__
+back-end/FastShare/fileupload/__pycache__
+back-end/FastShare/fileupload/migrations/__pycache__
 back-end/FastShare/media
