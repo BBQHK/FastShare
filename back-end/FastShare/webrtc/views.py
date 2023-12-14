@@ -1,4 +1,5 @@
 import datetime
+from django.utils import timezone
 import random
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -18,7 +19,7 @@ def webrtc_connection(request): # return the receive code for user create the we
     while ReceiveCodeRecord.objects.filter(receiveCode=receive_Code).exists():
         # check the created_at of the receive code, if it is > 10 min, delete it
         receiveCodeRecord = ReceiveCodeRecord.objects.get(receiveCode=receive_Code)
-        if receiveCodeRecord.created_at < datetime.timezone.now() - datetime.timedelta(minutes=10):
+        if receiveCodeRecord.created_at < timezone.now() - datetime.timedelta(minutes=10):
             receiveCodeRecord.delete()
             break
     ReceiveCodeRecord.objects.create(receiveCode=receive_Code)
