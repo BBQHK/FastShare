@@ -1,5 +1,5 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
-from .models import ReceiveCodeRecord
+from .models import ReceiveCodeTempStorage, ReceiveCodeCreateRecord, ReceiveCodeAccessRecord
 from asgiref.sync import sync_to_async
 
 # create a consumer to handle and exchange the offer and answer of WebRTC
@@ -10,7 +10,7 @@ class SignallingConsumer(AsyncWebsocketConsumer):
         self.group_name = 'p2p_signal_%s' % self.receive_Code
 
         # Check if the receive_Code exists in the database
-        exists = await sync_to_async(ReceiveCodeRecord.objects.filter(receiveCode=self.receive_Code).exists)()
+        exists = await sync_to_async(ReceiveCodeTempStorage.objects.filter(receiveCode=self.receive_Code).exists)()
         if not exists:
             # Close the connection
             await self.close()
@@ -24,12 +24,22 @@ class SignallingConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
+        # update access record
+        self.ReceiveCodeCreateRecord_id = await sync_to_async(ReceiveCodeCreateRecord.objects.filter(receiveCode=self.receive_Code).order_by('-created_at').first)()
+        await sync_to_async(ReceiveCodeAccessRecord.objects.create)(ReceiveCodeCreateRecord=self.ReceiveCodeCreateRecord_id, receiveCode=self.receive_Code, accessIP=self.scope['client'][0], status='connected')
+
     async def disconnect(self, close_code):
         # Leave the group
         await self.channel_layer.group_discard(
             self.group_name,
             self.channel_name
         )
+
+        # Delete the receive_Code from the database
+        await sync_to_async(ReceiveCodeTempStorage.objects.filter(receiveCode=self.receive_Code).delete)()
+
+        # update access record
+        await sync_to_async(ReceiveCodeAccessRecord.objects.create)(ReceiveCodeCreateRecord=self.ReceiveCodeCreateRecord_id, receiveCode=self.receive_Code, accessIP=self.scope['client'][0], status='disconnect')
 
     # receive the offer and answer from the sender and receiver and send it to the other side
     async def receive(self, text_data):
