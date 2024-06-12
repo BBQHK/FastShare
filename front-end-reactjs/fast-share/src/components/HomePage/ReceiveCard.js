@@ -2,8 +2,10 @@ import React from "react";
 import { Box, CardContent, TextField, Typography, Button } from "@mui/material";
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
-import { downloadFileByReceiveCode } from "../services/fileTransferService";
+import DownloadIcon from "@mui/icons-material/Download";
+import { downloadFileByReceiveCode } from "../../services/fileTransferService";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const ReceiveCard = () => {
     const [receiveCode, setReceiveCode] = useState("");
@@ -18,6 +20,16 @@ const ReceiveCard = () => {
             if (!response.ok) {
                 throw new Error("HTTP error " + response.status);
             }
+            toast.success("File download successfully", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
 
             const contentDispositionHeader = response.headers.get(
                 "content-disposition"
@@ -78,6 +90,7 @@ const ReceiveCard = () => {
                         variant="outlined"
                         placeholder="Enter code here"
                         onChange={handleReceiveCodeChange}
+                        value={receiveCode}
                         InputProps={{
                             style: { backgroundColor: "#f5f5f5" },
                         }}
@@ -85,17 +98,24 @@ const ReceiveCard = () => {
                 </Box>
             </CardContent>
             <Divider />
-            <CardContent>
+            <CardContent style={{ padding: 10 }}>
                 <Box sx={{ textAlign: "right" }}>
                     <Button
                         variant="contained"
                         style={{
-                            backgroundColor: "#ff2b40",
-                            color: "#FFFFFF",
-                            width: "120px",
+                            backgroundColor: "transparent",
+                            color: "#000000",
+                            // width: "140px",
+                            border: "2px solid #000000",
+                            boxShadow: "none",
+                            fontWeight: "bold",
                         }}
-                        onClick={handleDownload}
+                        onClick={() => {
+                            handleDownload();
+                            setReceiveCode("");
+                        }}
                     >
+                        <DownloadIcon />
                         DOWNLOAD
                     </Button>
                 </Box>

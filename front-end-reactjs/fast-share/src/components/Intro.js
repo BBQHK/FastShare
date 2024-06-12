@@ -14,14 +14,16 @@ const Intro = () => {
             }}
         >
             <img src={logo} alt="logo" style={{ width: "500px" }} />
-            <Typography
-                variant="h5"
-                gutterBottom
+            <img
+                src="https://readme-typing-svg.demolab.com?font=Tiny5&duration=1000&pause=1000&color=000000&multiline=true&repeat=false&random=false&width=410&height=100&lines=Share+and+download+files+easily+with+FastShare%2C+;your+go-to+file+sharing+platform."
                 style={{ paddingLeft: "45px" }}
-            >
-                Share and download files easily with FastShare, your go-to file
-                sharing platform.
-            </Typography>
+                alt="Typing SVG"
+            />
+            <img
+                src="https://readme-typing-svg.demolab.com?font=Tiny5&pause=1000&color=000000&random=false&width=435&lines=Do-Re-Mi-Fa-So-La-Ti-Do"
+                style={{ paddingLeft: "45px" }}
+                alt="Typing SVG"
+            />
         </Container>
     );
 };
