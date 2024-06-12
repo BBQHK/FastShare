@@ -1,0 +1,19 @@
+.key-box {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* or any specific height you want */
+}
+
+.key-box > span {
+    color: #333;
+    background-color: #fafafa;
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 2px;
+    display: inline-block;
+    width: 40px;
+    line-height: 64px;
+}
