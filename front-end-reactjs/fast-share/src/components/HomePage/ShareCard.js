@@ -19,13 +19,14 @@ const ShareCard = ({
 }) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
 
-    const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
-        noClick: true,
-        noKeyboard: true,
-        onDrop: (acceptedFiles) => {
-            setSelectedFiles(acceptedFiles);
-        },
-    });
+    const { getRootProps, getInputProps, open, isDragActive, acceptedFiles } =
+        useDropzone({
+            noClick: true,
+            noKeyboard: true,
+            onDrop: (acceptedFiles) => {
+                setSelectedFiles(acceptedFiles);
+            },
+        });
 
     const removeFile = (path) => {
         setSelectedFiles(selectedFiles.filter((file) => file.path !== path));
@@ -124,9 +125,13 @@ const ShareCard = ({
                             alignItems: "center",
                             justifyContent: "center",
                             padding: "30px",
-                            border: "2px dashed #D9D9D9",
+                            border: isDragActive
+                                ? "2px dashed #4A90E2"
+                                : "2px dashed #D9D9D9",
                             borderRadius: "5px",
-                            backgroundColor: "#F7F7F7",
+                            backgroundColor: isDragActive
+                                ? "#E8F4FD"
+                                : "#F7F7F7",
                             color: "#BDBDBD",
                             fontSize: "16px",
                             textAlign: "center",
