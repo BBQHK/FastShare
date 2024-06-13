@@ -16,7 +16,7 @@ const AboutPage = () => {
     return (
         <Box>
             <Container maxWidth="md">
-                <Typography variant="h4" align="center" gutterBottom>
+                <Typography variant="h2" align="center" gutterBottom>
                     About Me
                 </Typography>
                 <Grid container spacing={4}>
@@ -35,21 +35,19 @@ const AboutPage = () => {
                     </Grid>
                     <Grid item xs={12} md={8}>
                         <Typography variant="body1" paragraph>
-                            Welcome to our project! This project is a
-                            collaborative effort of a group of passionate
-                            developers who aim to create innovative solutions
-                            for modern problems.
+                            FastShare is a side project aimed at building a file
+                            sharing platform similar to Send Anywhere.
                         </Typography>
                         <Typography variant="body1" paragraph>
-                            Our project leverages the latest technologies in the
-                            industry, including React, Node.js, and MongoDB, to
-                            deliver a seamless and efficient user experience.
+                            The platform is implemented using React.js and
+                            Django, leveraging the strengths of these
+                            technologies to provide a robust and efficient
+                            service.
                         </Typography>
                         <Typography variant="body1" paragraph>
-                            We believe in the power of technology to transform
-                            lives and industries. Through this project, we hope
-                            to contribute to the tech community and make a
-                            positive impact.
+                            Our goal is to enable users to share files in the
+                            simplest way possible, reducing the complexity often
+                            associated with file sharing.
                         </Typography>
                         <Typography variant="body1" paragraph>
                             We're always open to feedback and suggestions. If
@@ -58,7 +56,7 @@ const AboutPage = () => {
                             you!
                         </Typography>
                         <Typography variant="body1" paragraph>
-                            Thank you for your interest in our project. We hope
+                            Thank you for your interest in FastShare. We hope
                             you find it useful and look forward to your
                             continued support.
                         </Typography>

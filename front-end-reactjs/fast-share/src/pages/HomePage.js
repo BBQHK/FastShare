@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Intro from "../components/Intro";
 import ShareCard from "../components/HomePage/ShareCard";
 import ReceiveCard from "../components/HomePage/ReceiveCard";
@@ -13,16 +14,17 @@ const HomePage = () => {
         useState(false);
     const [fileId, setFileId] = useState("");
     const [receiveCode, setReceiveCode] = useState("000000");
+    const isSmallScreen = useMediaQuery("(max-width:850px)");
 
     return (
         <Container maxWidth={false} style={{ margin: "50px 0px" }}>
             <Grid container spacing={3}>
                 <Grid
                     item
-                    xs={5}
+                    xs={isSmallScreen ? 12 : 5}
                     container
                     direction="column"
-                    alignItems="flex-end"
+                    alignItems={isSmallScreen ? "center" : "flex-end"}
                 >
                     {showTransferSuccessCard ? (
                         <TransferSuccessCard
@@ -57,9 +59,11 @@ const HomePage = () => {
                     )}
                     <ReceiveCard />
                 </Grid>
-                <Grid item xs={7}>
-                    <Intro />
-                </Grid>
+                {!isSmallScreen && (
+                    <Grid item xs={7}>
+                        <Intro />
+                    </Grid>
+                )}
             </Grid>
         </Container>
     );

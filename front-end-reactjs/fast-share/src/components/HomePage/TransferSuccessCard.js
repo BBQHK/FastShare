@@ -2,7 +2,7 @@ import React from "react";
 import { Box, CardContent, Typography, Button } from "@mui/material";
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
 import ReplayIcon from "@mui/icons-material/Replay";
 
 const TransferSuccessCard = ({
@@ -27,7 +27,7 @@ const TransferSuccessCard = ({
                     </Typography>
                 </Box>
                 <Box display="flex" alignItems="center" sx={{ marginTop: 2 }}>
-                    <CheckCircleIcon
+                    <ConnectWithoutContactIcon
                         style={{ fontSize: 100, color: "#ff2b40" }}
                     />
                     <Typography
