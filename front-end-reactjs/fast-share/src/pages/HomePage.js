@@ -24,7 +24,7 @@ const HomePage = () => {
                     xs={isSmallScreen ? 12 : 5}
                     container
                     direction="column"
-                    alignItems={isSmallScreen ? "center" : "flex-end"}
+                    alignItems="center"
                 >
                     {showTransferSuccessCard ? (
                         <TransferSuccessCard

@@ -75,7 +75,7 @@ const ReceiveCard = () => {
     };
 
     return (
-        <Card variant="outlined" sx={{ width: 400 }}>
+        <Card variant="outlined" sx={{ marginBottom: 2, width: 400 }}>
             <CardContent>
                 <Typography
                     variant="h6"

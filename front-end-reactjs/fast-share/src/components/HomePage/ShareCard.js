@@ -9,6 +9,7 @@ import { uploadFile } from "../../services/fileTransferService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as JSZip from "jszip";
+import { useDropzone } from "react-dropzone";
 
 const ShareCard = ({
     toggleReceiveCodeCard,
@@ -17,9 +18,33 @@ const ShareCard = ({
 }) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
 
-    const handleFileChange = (event) => {
-        setSelectedFiles([...event.target.files]);
-    };
+    const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
+        noClick: true,
+        noKeyboard: true,
+        onDrop: (acceptedFiles) => {
+            setSelectedFiles(acceptedFiles);
+        },
+    });
+
+    const files = acceptedFiles.map((file) => (
+        <li
+            key={file.path}
+            style={{
+                margin: "10px 0",
+                padding: "10px",
+                border: "1px solid #ddd",
+                borderRadius: "5px",
+                backgroundColor: "#F7F7F7",
+            }}
+        >
+            <p style={{ margin: 0, fontWeight: "bold", color: "#4A4A4A" }}>
+                {file.path}
+            </p>
+            <p style={{ margin: 0, color: "#9B9B9B" }}>
+                {(file.size / 1024).toFixed(2)} KB
+            </p>
+        </li>
+    ));
 
     const handleUpload = async () => {
         let files = selectedFiles;
@@ -74,35 +99,53 @@ const ShareCard = ({
                 >
                     Share
                 </Typography>
-                <Box sx={{ marginTop: 2, marginBottom: 2 }}>
-                    <Input
-                        type="file"
-                        inputProps={{ multiple: true }}
-                        onChange={handleFileChange}
-                        sx={{ display: "none" }}
-                        id="file-input"
-                    />
-                    <label htmlFor="file-input">
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            placeholder="Select files here"
-                            InputProps={{
-                                readOnly: true,
-                                style: {
-                                    backgroundColor: "#f5f5f5",
-                                    cursor: "pointer",
-                                },
+                <Box sx={{ marginTop: 2, marginBottom: 2 }} {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "30px",
+                            border: "2px dashed #D9D9D9",
+                            borderRadius: "5px",
+                            backgroundColor: "#F7F7F7",
+                            color: "#BDBDBD",
+                            fontSize: "16px",
+                            textAlign: "center",
+                            cursor: "pointer",
+                        }}
+                        onClick={open}
+                    >
+                        <p>Drag & Drop files here or</p>
+                        <p
+                            style={{
+                                color: "#4A90E2",
+                                textDecoration: "underline",
                             }}
-                            value={selectedFiles
-                                .map((file) => file.name)
-                                .join(", ")}
-                            onClick={() =>
-                                document.getElementById("file-input").click()
-                            }
-                        />
-                    </label>
+                        >
+                            Browse files
+                        </p>
+                    </div>
                 </Box>
+                {files.length > 0 && (
+                    <aside>
+                        <h4 style={{ color: "#4A4A4A", marginBottom: "10px" }}>
+                            Selected Files
+                        </h4>
+                        <ul
+                            style={{
+                                listStyleType: "none",
+                                padding: 0,
+                                maxHeight: "100px",
+                                overflowY: "auto",
+                            }}
+                        >
+                            {files}
+                        </ul>
+                    </aside>
+                )}
             </CardContent>
             <Divider />
             <CardContent style={{ padding: 10 }}>
