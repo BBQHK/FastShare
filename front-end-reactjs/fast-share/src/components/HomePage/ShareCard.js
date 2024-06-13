@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, CardContent, TextField, Typography, Button } from "@mui/material";
-import Input from "@mui/material/Input";
+import { Box, CardContent, Typography, Button } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 import Card from "@mui/material/Card";
 import UploadIcon from "@mui/icons-material/Upload";
 import { useState } from "react";
@@ -26,10 +27,17 @@ const ShareCard = ({
         },
     });
 
-    const files = acceptedFiles.map((file) => (
+    const removeFile = (path) => {
+        setSelectedFiles(selectedFiles.filter((file) => file.path !== path));
+    };
+
+    const files = selectedFiles.map((file) => (
         <li
             key={file.path}
             style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
                 margin: "10px 0",
                 padding: "10px",
                 border: "1px solid #ddd",
@@ -37,12 +45,20 @@ const ShareCard = ({
                 backgroundColor: "#F7F7F7",
             }}
         >
-            <p style={{ margin: 0, fontWeight: "bold", color: "#4A4A4A" }}>
-                {file.path}
-            </p>
-            <p style={{ margin: 0, color: "#9B9B9B" }}>
-                {(file.size / 1024).toFixed(2)} KB
-            </p>
+            <div>
+                <p style={{ margin: 0, fontWeight: "bold", color: "#4A4A4A" }}>
+                    {file.path}
+                </p>
+                <p style={{ margin: 0, color: "#9B9B9B" }}>
+                    {(file.size / 1024).toFixed(2)} KB
+                </p>
+            </div>
+            <IconButton
+                onClick={() => removeFile(file.path)}
+                style={{ color: "red" }}
+            >
+                <CloseIcon />
+            </IconButton>
         </li>
     ));
 
