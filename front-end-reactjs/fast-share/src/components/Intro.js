@@ -12,7 +12,7 @@ const Intro = () => {
                 justifyContent: "center",
             }}
         >
-            <img src={logo} alt="logo" />
+            <img src={logo} alt="logo" style={{ maxWidth: "700px" }} />
             <img
                 src="https://readme-typing-svg.demolab.com?font=Tiny5&duration=1000&pause=1000&color=000000&multiline=true&repeat=false&random=false&width=410&height=100&lines=Share+and+download+files+easily+with+FastShare%2C+;your+go-to+file+sharing+platform."
                 style={{ paddingLeft: "45px" }}
