@@ -5,7 +5,7 @@ import Divider from "@mui/material/Divider";
 import DownloadIcon from "@mui/icons-material/Download";
 import { downloadFileByReceiveCode } from "../../services/fileTransferService";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { showToast } from "../../utils/commonToast";
 
 const ReceiveCard = () => {
     const [receiveCode, setReceiveCode] = useState("");
@@ -16,20 +16,16 @@ const ReceiveCard = () => {
 
     const handleDownload = async () => {
         try {
+            if (!receiveCode) {
+                showToast("error", "Please enter a receive code");
+                return;
+            }
             const response = await downloadFileByReceiveCode(receiveCode);
             if (!response.ok) {
+                showToast("error", "HTTP error " + response.status);
                 throw new Error("HTTP error " + response.status);
             }
-            toast.success("File download successfully", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            showToast("success", "File download successfully");
 
             const contentDispositionHeader = response.headers.get(
                 "content-disposition"

@@ -7,10 +7,10 @@ import UploadIcon from "@mui/icons-material/Upload";
 import { useState } from "react";
 import Divider from "@mui/material/Divider";
 import { uploadFile } from "../../services/fileTransferService";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as JSZip from "jszip";
 import { useDropzone } from "react-dropzone";
+import { showToast } from "../../utils/commonToast";
 
 const ShareCard = ({
     toggleReceiveCodeCard,
@@ -66,6 +66,11 @@ const ShareCard = ({
     const handleUpload = async () => {
         let files = selectedFiles;
 
+        if (files.length === 0) {
+            showToast("error", "Please select a file to upload");
+            return;
+        }
+
         // if files item more than 1, zip them together and put the zip file into files
         if (files.length > 1) {
             files = [await generateZipFile(files)];
@@ -73,20 +78,13 @@ const ShareCard = ({
 
         try {
             const response = await uploadFile(files[0]);
+            const data = await response.json();
             if (!response.ok) {
+                showToast("error", "HTTP error " + response.status);
                 throw new Error("HTTP error " + response.status);
             }
-            toast.success("File has been uploaded successfully", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-            const data = await response.json();
+            showToast("success", data.message);
+
             changeFileId(data.id.toString());
             changeReceiveCode(data.receiveCode.toString());
             toggleReceiveCodeCard(true);

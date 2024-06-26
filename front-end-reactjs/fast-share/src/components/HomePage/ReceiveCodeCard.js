@@ -6,7 +6,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import IconButton from "@mui/material/IconButton";
 import createWebSocketConnection from "../../services/websocket";
 import { cancelUpload } from "../../services/fileTransferService";
-import { toast } from "react-toastify";
+import { showToast } from "../../utils/commonToast";
 
 const ReceiveCodeCard = ({
     toggleReceiveCodeCard,
@@ -44,36 +44,18 @@ const ReceiveCodeCard = ({
 
     const handleCancelButtonClick = async () => {
         const response = await cancelUpload(id, code);
+        const data = await response.json();
         if (!response.ok) {
+            showToast("error", data.message);
             console.error("Error cancelling upload");
         }
-        toast.info("File transfer has been canceled by user", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-        });
-        const data = await response.json();
-        console.log(data);
+        showToast("info", data.message);
         toggleReceiveCodeCard(false);
     };
 
     const copyCode = () => {
         navigator.clipboard.writeText(code);
-        toast.info("Copied to clipboard", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-        });
+        showToast("info", "Copied to clipboard");
     };
 
     const formatTime = (time) => {
