@@ -46,7 +46,7 @@ def cancel_upload(request):
         return Response({'message': 'File not found'}, status=404)
     
     file.delete()
-    return Response({'message': 'Cancel successfully, the file has delected.'}, status=200)
+    return Response({'message': 'Cancel successfully, the file has deleted.'}, status=200)
 
 @api_view(['GET'])
 def download_file(request, receive_Code):
