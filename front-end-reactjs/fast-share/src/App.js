@@ -100,7 +100,9 @@ function App() {
                         <MenuIcon />
                     </IconButton>
                     {/* place the logo here */}
-                    <img src={logo} alt="logo" style={{ height: "50px" }} />
+                    <LinkRouter to="/">
+                        <img src={logo} alt="logo" style={{ height: "50px" }} />
+                    </LinkRouter>
                 </Toolbar>
             </AppBar>
             <Drawer
