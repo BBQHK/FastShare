@@ -1,2 +1,2 @@
 cd front-end-reactjs\fast-share
-npm start
+set port=5000&&npm start

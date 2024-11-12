@@ -1,0 +1,19 @@
+{
+    "apps": [
+        {
+            "name": "react",
+            "script": "C:/Users/G21778/AppData/Roaming/npm/node_modules/npm/bin/npm-cli.js", // for example: C:/Users/xxxxxx/AppData/Roaming/npm/node_modules/npm/bin/npm-cli.js
+            "args": "start",
+            "cwd": "front-end-reactjs/fast-share",
+            "env": {
+                "PORT": 5000
+            }
+        },
+        {
+            "name": "django",
+            "script": "python",
+            "args": "manage.py runserver 0.0.0.0:5001",
+            "cwd": "back-end/FastShare"
+        }
+    ]
+}
